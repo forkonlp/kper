@@ -32,3 +32,27 @@ for (i in 1:length(allt)){
   }
 }
 
+
+saveLETTERS<-function(i,j){
+  text = allt[i]
+  fam = fonttable()[j,5]
+  ff = "plain"
+  if(fonttable()[j,7]){ff = "bold"}
+  if(fonttable()[j,8]){ff = "italic"}
+  if(fonttable()[j,7]&fonttable()[j,8]){ff = "bold.italic"}
+  ggplot() + 
+    annotate("text", x = 0, y = 0, size=8, label = text, family=fam, fontface=ff) + 
+    theme_bw() +
+    theme_void() +
+    theme(panel.grid.major=element_blank(),
+          panel.grid.minor=element_blank(),
+          legend.position = "none")
+  
+  dir.create(sprintf("./data/f%05d",i),showWarnings = F)
+  fn<-paste0("./data/f",sprintf("%05d",i),"/t",sprintf("%05d",i),"_",gsub(" ","-",fonttable()[j,4]),".png")
+  ggsave(file = fn,width=10,height=10,units="mm")
+}
+
+sapply(1:length(allt),function(i) sapply(1:nrow(fonttable()), function(j) saveLETTERS(i,j)))
+
+
